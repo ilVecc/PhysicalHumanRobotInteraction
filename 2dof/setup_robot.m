@@ -2,6 +2,7 @@ addpath('scripts');
 
 %% robot parameters
 dh.dof = 2;
+dh.dof_task = 2;
 dh.m1 = 1;
 dh.m2 = 1;
 dh.l = 1;

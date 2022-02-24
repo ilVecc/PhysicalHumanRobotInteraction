@@ -3,6 +3,7 @@ addpath('scripts');
 %% robot parameters
 dh.issym = false;
 dh.dof = 6;
+dh.dof_task = 6;
 dh.d = [0.089159 0 0 0.10915 0.09465 0.0823];
 dh.m = [3.7000 8.3930 2.2750 1.2190 1.2190 0.1879];
 dh.alpha = [pi/2 0 0 pi/2 -pi/2 0];
@@ -47,13 +48,3 @@ conf.des.qd = [0 0 0 0 0 0]';
 conf.des.dqd = [0 0 0 0 0 0]';
 conf.des.xd = K_rne(dh, conf.des.qd);
 conf.des.dxd = [0 0 0 0 0 0]';
-
-%% show robot
-UR5_robot = importrobot('./ur_description_noEE/urdf/ur5.urdf');
-UR5_robot.DataFormat = 'column';
-%showdetails(UR5_robot);
-%config = homeConfiguration(UR5_robot);
-show(UR5_robot,conf.init.q0);
-xlim([-0.4 0.4]);
-ylim([-0.5 0.5]);
-zlim([-0.1 0.6]);
