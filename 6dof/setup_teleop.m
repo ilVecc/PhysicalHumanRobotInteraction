@@ -5,13 +5,21 @@ T_m2s = 25 / 1000 / Ts;  % [ 0.025 s]
 T_s2m = 25 / 1000 / Ts;  % [ 0.025 s]
 
 %% HUMAN SETUP
+% trajectory controller
 z = 0.0;
 wn = 250;
 KD_h = eye(dh.dof_task) * 2*z*wn;
 KP_h = eye(dh.dof_task) * wn^2;
 clear z wn
+% trajectory waypoints
 Xd = [conf.init.x0 conf.init.x0+[0.1;0;0;0;0;0] conf.init.x0];
 td = [ 0, 8, 16 ];
+% robot force filter
+fc = 100;  % [Hz]
+wc = 2*pi*fc;
+Fmh_B = [0 0 0 wc^3];
+Fmh_A = [1 3*wc 3*wc^2 wc^3];
+clear fc wc
 
 %% ENVIRONMENT SETUP
 KD_e = zeros(dh.dof_task);
@@ -55,10 +63,11 @@ M_m = diag(ones(1,dh.dof_task)) * 1;
 B_m = diag(ones(1,dh.dof_task)) * 100;
 K_m = diag(ones(1,dh.dof_task)) * 0;
 % master command filter
-% Fm_fc = 30;  % [Hz]
-% wc = 2*pi*Fm_fc;
-% Fm_B = [0 0 wc^2];
-% Fm_A = [1 2*wc wc^2];
+Fm_fc = 0.01;  % [Hz]
+wc = 2*pi*Fm_fc;
+Fm_B = [0 0 wc^2];
+Fm_A = [1 2*wc wc^2];
+clear Fm_fc wc
 
 
 %% SLAVE SETUP
@@ -77,3 +86,4 @@ clear k_g
 % wc = 2*pi*Fs_fc;
 % Fs_B = [0 0 wc^2];
 % Fs_A = [1 2*wc wc^2];
+% clear Fs_fc wc
