@@ -6,33 +6,28 @@ T_s2m = 25 / 1000 / Ts;  % [ 0.025 s]
 
 %% HUMAN SETUP
 % trajectory controller
-z = 0.0;
-wn = 250;
-KD_h = eye(dh.dof_task) * 2*z*wn;
-KP_h = eye(dh.dof_task) * wn^2;
-clear z wn
+KD_h = eye(dh.dof_task) * 50.0;
+KP_h = eye(dh.dof_task) * 350.0;
+clear z wn;
 % trajectory waypoints
-Xd = [conf.init.x0 conf.init.x0+[0.1;0;0;0;0;0] conf.init.x0];
-td = [ 0, 8, 16 ];
-% robot force filter
-fc = 100;  % [Hz]
+Xd = [ conf_m.init.x0 conf_m.init.x0 conf_m.init.x0+[0.1;0.0;0.0;0;0;0] conf_m.init.x0 ];
+%Xd = [ conf_m.init.x0 conf_m.init.x0 conf_m.init.x0                 conf_m.init.x0 ];
+td = [            0            1                          10            18 ];
+% human sensing filter
+fc = 10;  % [Hz]
 wc = 2*pi*fc;
-Fmh_B = [0 0 0 wc^3];
-Fmh_A = [1 3*wc 3*wc^2 wc^3];
-clear fc wc
+Fh_B = [0 0 0 0 wc^4];
+Fh_A = [1 4*wc 6*wc^2 4*wc^3 wc^4];
+clear fc wc;
 
 %% ENVIRONMENT SETUP
-KD_e = zeros(dh.dof_task);
-KD_e(1,1) = 10;
-KE_e = zeros(dh.dof_task);
-KE_e(1,1) = 100;
+KD_e = zeros(dh.dof_task); KD_e(1,1) = 10;
+KE_e = zeros(dh.dof_task); KE_e(1,1) = 100;
+% environment position
 Xe = conf.init.x0;
 Xe(1) = -0.08;
 
-%% considerations on the the observer's parameters
-
-%
-% SLIDING-MODE OBSERVER
+%% observations on the the observer's parameters
 %
 % |M^-1 * Fh| < f
 % 0 < p < 1
@@ -48,10 +43,10 @@ Xe(1) = -0.08;
 %
 
 %% EQUIVALENT OUTPUT INJECTION SIGNAL FILTER
-fc = 5;  % [Hz]
+fc = 100;  % [Hz]
 wc = 2*pi*fc;
-zdq_B = [0 0 0 wc^3];
-zdq_A = [1 3*wc 3*wc^2 wc^3];
+zdq_B = [0 0 0 0 wc^4];
+zdq_A = [1 4*wc 6*wc^2 4*wc^3 wc^4];
 clear fc wc
 
 %% MASTER SETUP
@@ -62,12 +57,12 @@ lambdas_m = 4.0 * ones(1,dh.dof_task);  % 18.5
 M_m = diag(ones(1,dh.dof_task)) * 1;
 B_m = diag(ones(1,dh.dof_task)) * 100;
 K_m = diag(ones(1,dh.dof_task)) * 0;
-% master command filter
-Fm_fc = 0.01;  % [Hz]
-wc = 2*pi*Fm_fc;
-Fm_B = [0 0 wc^2];
-Fm_A = [1 2*wc wc^2];
-clear Fm_fc wc
+% % master command filter
+% Fm_fc = 0.01;  % [Hz]
+% wc = 2*pi*Fm_fc;
+% Fm_B = [0 0 wc^2];
+% Fm_A = [1 2*wc wc^2];
+% clear Fm_fc wc
 
 
 %% SLAVE SETUP
@@ -81,7 +76,7 @@ K_s = diag(ones(1,dh.dof_task)) * 75;
 k_g = 40; % 2*sqrt(dh.dof_task)*(max(alphas_s) + max(alphas_m));
 K_g = eye(dh.dof_task) * k_g;
 clear k_g
-% slave command filter
+% % slave command filter
 % Fs_fc = 30;  % [Hz]
 % wc = 2*pi*Fs_fc;
 % Fs_B = [0 0 wc^2];

@@ -38,10 +38,15 @@ gravity = [0 0 9.81]';
 %Fs = 0;
 
 % initial configuration
-conf.init.q0 = [-1.6007 -1.7271 -2.203 0.7628 1.5951 -0.031]';
-conf.init.dq0 = [0 0 0 0 0 0]';
-conf.init.x0 = K_rne(dh, conf.init.q0);
-conf.init.dx0 = [0 0 0 0 0 0]';
+conf_m.init.q0 = [-1.6007 -1.7271 -2.203 0.7628 1.5951 -0.031]';
+conf_m.init.dq0 = [0 0 0 0 0 0]';
+conf_m.init.x0 = K_rne(dh, conf.init.q0);
+conf_m.init.dx0 = [0 0 0 0 0 0]';
+
+conf_s.init.q0 = [-1.6007 -1.7271 -2.203 0.7628 1.5951 -0.031]';
+conf_s.init.dq0 = [0 0 0 0 0 0]';
+conf_s.init.x0 = K_rne(dh, conf.init.q0);
+conf_s.init.dx0 = [0 0 0 0 0 0]';
 
 % desired configuration
 conf.des.qd = [0 0 0 0 0 0]';
