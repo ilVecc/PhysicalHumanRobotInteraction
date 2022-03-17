@@ -6,10 +6,15 @@ T_s2m = 25 / 1000 / Ts;  % [ 0.025 s]
 
 %% HUMAN SETUP
 % trajectory waypoints
-td  = [              0              1                                  10             18 ];
+td1 = [              0              1                                  10             18 ];
 Xd1 = [ conf_m.init.x0 conf_m.init.x0  conf_m.init.x0+[0.1;0.0;0.0;0;0;0] conf_m.init.x0 ];
+td2 = [              0              1                                  10             18 ];
 Xd2 = [ conf_m.init.x0 conf_m.init.x0 conf_m.init.x0+[-0.1;0.1;0.1;0;0;0] conf_m.init.x0 ];
-Xd = Xd2;
+td3 = [              0              1                                  10                                 13              18 ];
+Xd3 = [ conf_m.init.x0 conf_m.init.x0  conf_m.init.x0+[0.1;0.0;0.0;0;0;0] conf_m.init.x0+[0.1;0.0;0.0;0;0;0]  conf_m.init.x0 ];
+% choose trajectory
+td = td3;
+Xd = Xd3;
 % trajectory controller
 KD_h = eye(dh.dof_task) * 50.0;
 KP_h = eye(dh.dof_task) * 350.0;
