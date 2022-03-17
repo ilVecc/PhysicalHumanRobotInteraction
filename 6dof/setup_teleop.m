@@ -1,4 +1,4 @@
-Ts = 0.001;
+Ts = 0.001;  % [s]
 % master delay
 T_m2s = 25 / 1000 / Ts;  % [ 0.025 s]
 % slave delay
@@ -74,7 +74,6 @@ K_m = diag(ones(1,dh.dof_task)) * 0;
 % Fm_A = [1 2*wc wc^2];
 % clear Fm_fc wc
 bl_obs_m = 1e-4;
-
 
 %% SLAVE SETUP
 % slave observer

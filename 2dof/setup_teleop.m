@@ -5,13 +5,25 @@ T_m2s = 25 / 1000 / Ts;  % [ 0.025 s]
 T_s2m = 25 / 1000 / Ts;  % [ 0.025 s]
 
 %% HUMAN SETUP
-z = 0.0;
-wn = 250;
-KD_h = eye(dh.dof_task) * 2*z*wn;
-KP_h = eye(dh.dof_task) * wn^2;
-clear z wn
-Xd = [conf.init.x0 conf.init.x0+[0.1;0] conf.init.x0];
-td = [ 0, 8, 16 ];
+td1 = [            0                    8           16 ];
+Xd1 = [ conf.init.x0 conf.init.x0+[0.1;0] conf.init.x0 ];
+% choose trajectory
+td = td1;
+Xd = Xd1;
+% trajectory controller
+KD_h = eye(dh.dof_task) * 50.0;
+KP_h = eye(dh.dof_task) * 350.0;
+% human sensing filter
+fc = 10;  % [Hz]
+wc = 2*pi*fc;
+FdXh_B = [0 0 0 0 wc^4];
+FdXh_A = [1 4*wc 6*wc^2 4*wc^3 wc^4];
+clear fc wc;
+fc = 60;  % [Hz]
+wc = 2*pi*fc;
+FXh_B = [1];
+FXh_A = [1];
+clear fc wc;
 
 %% ENVIRONMENT SETUP
 KD_e = eye(dh.dof_task) * 1000;
@@ -38,6 +50,8 @@ K_m = diag(ones(1,dh.dof)) * 22;
 % wc = 2*pi*Fm_fc;
 % Fm_B = [0 0 wc^2];
 % Fm_A = [1 2*wc wc^2];
+% clear Fm_fc wc
+bl_obs_m = 1e-4;
 
 %% SLAVE SETUP
 % slave observer
@@ -55,3 +69,6 @@ clear k_g
 % wc = 2*pi*Fs_fc;
 % Fs_B = [0 0 wc^2];
 % Fs_A = [1 2*wc wc^2];
+% clear Fs_fc wc
+bl_obs_s = bl_obs_m;
+bl_s = 1e-1;

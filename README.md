@@ -4,6 +4,9 @@ Final project (paper implementation) for the Physical Human Robot Interaction co
 
 The main goal of this project is to implement a UR5 simulation environment for the teleoperation system proposed by [Daly et al.](https://doi.org/10.1109/TCST.2013.2242329). Many of the details omitted in the brief can be found in the original [PhD thesis](http://hdl.handle.net/10012/5115).
 
+## Notes
+The 2DOF scenario has not been tested for a long time, it might not work.
+
 ## Results
 In the first scenario proposed, shown below, a simple x-axis trajectory is imposed by the human operator.
 ![Simulation results](./report/simulation_results_1.png)
